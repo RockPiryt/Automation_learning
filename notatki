@@ -1,0 +1,96 @@
+[varant] - tworzy vm
+system operacyjny = box
+config.vm.box = "ubuntu/focal64"
+
+provider= wtyczka,która apotrafi utworzyć vm, używa API
+ config.vm.provider "virtualbox"
+ 
+ 
+ vagrant up -  tworzy vm
+ vagrant provision - wykonaj ponownie konfigurację maszyny przez provisioner, np. Ansible
+ vagrant destroy - usuwa vm
+ vagrant status -status vm
+ vagrant ssh - dostep do vm
+ 
+ --help
+ 
+ 
+ [Ansible] - cm, config managment, an  agentless automation tool
+ deklaratywny stan konfiguracji
+ w python napisane
+ 
+ YAML - Yet Another Markup Language - ważne wcięcia i wielkośc liter
+ - uzywa ssh do zmiany konfiguracji
+ 
+ cd ~/ansible
+source .venv/bin/activate
+
+
+playbook - kolekcja zadań dla hosta
+node control - z poziomu node control będę uruchamiać playbook i polecenia (mogę mieć dowolną ilość)
+
+ewidencja - plik zawiera listę hostów z którymi ansible będzie się komunikować
+
+moduł - hemetyzuje kod
+
+job - zadanie dla hosta
+
+rola - grupa zadań i zmienncyh, mozna się tym dzielić aby osiągnąć ten sam cel, np przygotowanie hosta jako servera bazy danych
+
+
+
+---
+- name: Provision VM  -- nazwa playbook
+  hosts: all 
+  become: yes
+  become_method: sudo - dodatkowe uprawnienia
+  remote_user: ubuntu - nazwa usera na hoscie (przez virtualbox instaluje ubuntu)
+  tasks:
+    #  - import_tasks: chapter2/pam_pwquality.yml
+    #  - import_tasks: chapter2/user_and_group.yml
+    #  - import_tasks: chapter3/authorized_keys.yml
+    #  - import_tasks: chapter3/two_factor.yml
+    #  - import_tasks: chapter4/web_application.yml
+    #  - import_tasks: chapter4/sudoers.yml
+    #  - import_tasks: chapter5/firewall.yml
+  handlers:
+    #  - import_tasks: handlers/restart_ssh.yml
+    
+    
+ ansible - w terminalu, jednorazowe  komendy,
+ np restart servera nginx
+ ansible webservers -m servie -a "name=nginx state=restarted" --become
+ 
+ -m service nazwa modułu
+ -a przekazywanie argumentów do modułu
+ -- become = podniesienie uprawnień, sudo
+ 
+ ansible-playbook 
+ 
+ np wykonanie palybook z pliku aws-cloudwatch.yml 
+ ansible-playbook -l dockerhosts aws-cloudwatch.yml
+ 
+ -l dockerhosts - podaje podzbiór hostów z ewidencji wszystkich hostów
+ jak nie specyzuje to wykona dla wszystkich hostów z ewidencji
+
+[system]
+lsmod - moduły załadowane do kernela
+
+vboxdrv -To główny moduł kernela VirtualBoxa. VirtualBox używa go do komunikacji z kernelem i wykonywania operacji potrzebnych do uruchomienia VM.
+vboxnetflt - To moduł związany z siecią VirtualBoxa. Pozwala VirtualBoxowi przechwytywać/przepuszczać ruch sieciowy VM, np. przy:NAT,bridged networking,
+vboxnetadp - To moduł związany z wirtualnymi interfejsami sieciowymi VirtualBoxa, np. host-only networking.
+
+Secure Boot - mechanizm UEFI, który ma chronić komputer przed uruchomieniem nieautoryzowanego oprogramowania na poziomie bootowania i kernela.
+
+
+Snap to sposób pakowania aplikacji w Ubuntu.
+
+Zamiast aplikacji korzystającej bezpośrednio z systemu:
+(VS Code->biblioteki Ubuntu->system)
+
+Snap stara się zapewnić aplikacji własne środowisko:
+VS Code->
+Snap
+ ├── własne biblioteki
+ ├── własne środowisko
+ └── ograniczony dostęp do systemu
